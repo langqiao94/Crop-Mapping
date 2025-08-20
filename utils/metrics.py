@@ -1,6 +1,9 @@
 import torch
 import numpy as np
 from sklearn.metrics import precision_score, recall_score, f1_score
+import logging
+
+logger = logging.getLogger(__name__)
 
 class MetricsCalculator:
     """
@@ -61,7 +64,7 @@ class MetricsCalculator:
             self.correct_pixels += (pred == target).sum().item()
             
         except Exception as e:
-            print(f"Error in metrics update: {str(e)}")
+            logger.error(f"Error in metrics update: {str(e)}")
             raise
     
     def get_metrics(self):
@@ -140,7 +143,7 @@ class MetricsCalculator:
             return metrics
             
         except Exception as e:
-            print(f"Error in metrics calculation: {str(e)}")
+            logger.error(f"Error in metrics calculation: {str(e)}")
             # Return default metrics
             return {
                 'accuracy': 0.0,
