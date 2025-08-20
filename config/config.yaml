@@ -1,0 +1,98 @@
+# Dataset configuration
+data_config: 'config/dataset_config.yaml'
+
+
+# Swin Transformer expert configuration
+swin_expert:
+  type: 'swin'
+  in_channels: 72   # In season modification
+  embed_dims: 192
+  patch_size: 4
+  window_size: 7
+  mlp_ratio: 2.0
+  depths: [2, 2, 18, 2]
+  num_heads: [6, 12, 24, 48]
+  out_indices: [0, 1, 2, 3]
+  qkv_bias: True
+  patch_norm: True
+  drop_rate: 0.1
+  attn_drop_rate: 0.1
+  drop_path_rate: 0.1
+  use_abs_pos_embed: False
+  act_cfg:
+    type: 'GELU'
+  norm_cfg:
+    type: 'LN'
+    eps: 1e-6
+
+# GRU expert configuration
+gru_expert:
+  convlstm_hidden_dim: 128   # Increase to 128
+  num_layers: 1
+  cnn_output_channels: 128   # Increase to 128
+  convlstm_kernel_size: [3, 3]  
+  embedding_dim: 32
+
+# Decoder head configuration
+decode_head:
+  type: 'UPerHead'
+  in_channels: [192, 384, 768, 1536]
+  channels: 512  # Increase to 512
+  num_classes: 6  # Change back to 6, user confirms data is 6 classes
+  dropout: 0.1
+  norm_cfg:
+    type: 'LN'  # Change to LN
+    requires_grad: True
+  align_corners: False
+
+# Category-aware gate configuration
+category_gate:
+  num_classes: 6  # Change back to 6, user confirms data is 6 classes
+  hidden_dim: 128  # Increase to 64
+  dropout: 0.1
+
+# Training configuration
+training:
+  # Basic training parameters
+  epochs: 100
+  
+  # Optimizer configuration --- original configuration
+  optimizer:
+    type: 'AdamW'
+    lr: 5.0e-5
+    weight_decay: 0.01
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+  
+  # Learning rate adjustment configuration
+  lr_scheduler:
+    type: 'CosineAnnealingWarmRestarts'
+    T_0: 20  # First restart period
+    T_mult: 2  # Multiplier after each restart
+    eta_min: 1.0e-6  # Minimum learning rate
+    warmup:
+      type: 'linear'
+      epochs: 10
+      ratio: 0.3  # Warmup learning rate ratio
+  
+  # Training process control
+  early_stopping:
+    patience: 15
+    min_delta: 0.001
+  
+  # Checkpoint configuration
+  checkpoint:
+    save_dir: "checkpoints"
+    save_freq: 100
+  
+  # Gradient clipping
+  clip_grad:
+    max_norm: 1.0
+    norm_type: 2
+
+# Evaluation metric configuration
+metrics:
+  main_metric: "accuracy"
+  metrics_list: ["accuracy", "precision", "recall", "f1", "mIoU"]
+
+

@@ -1,0 +1,137 @@
+# Dataset basic configuration
+dataset_type: 'CropMappingDataset'
+data_root: '.'
+
+# Dataset files
+data_files:
+  train: 'Dataset/2022_train.txt'
+  val: 'Dataset/2022_val.txt'
+  test: 'Dataset/2022_test.txt'
+
+# Dataset basic information
+data_info:
+  hls_channels: 72
+  hist_channels: 5
+  image_size: 128
+  num_classes: 6
+  class_names: ['other', 'corn', 'cotton', 'soybeans', 'spring wheat', 'winter wheat']
+
+# Standardization parameters for HLS data
+augmentation:
+  resize:
+    size: [128, 128]
+    keep_ratio: True
+  flip:
+    horizontal_prob: 0.5
+    vertical_prob: 0.0
+  normalize:
+    hls:  # HLS data standardization parameters
+      mean: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+             0.0, 0.0]
+      std: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+            1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+            1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+            1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+            1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+            1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+            1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+            1.0, 1.0]
+
+# Data loading configuration
+dataloader:
+  train:
+    batch_size: 24
+    num_workers: 4
+    shuffle: True
+    pin_memory: True
+    persistent_workers: True
+    prefetch_factor: 2
+    drop_last: True
+  val:
+    batch_size: 24
+    num_workers: 4
+    shuffle: False
+    pin_memory: True
+    persistent_workers: True
+    prefetch_factor: 2
+    drop_last: False
+  test:
+    batch_size: 24
+    num_workers: 4
+    shuffle: False
+    pin_memory: True
+    persistent_workers: True
+    prefetch_factor: 2
+    drop_last: False
+
+# Data processing pipeline
+pipeline:
+  train:
+    - type: 'LoadHLSImageFromFile'
+    - type: 'LoadMultiBandHistoryFromFile'
+    - type: 'LoadAnnotations'
+    - type: 'Resize'
+      scale: [128, 128]
+      keep_ratio: True
+    - type: 'RandomFlip'
+      prob: 0.5
+    - type: 'Normalize'
+      hls_mean: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                 0.0, 0.0]
+      hls_std: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0]
+    - type: 'PackSegInputs'
+  
+  val: &test_pipeline
+    - type: 'LoadHLSImageFromFile'
+    - type: 'LoadMultiBandHistoryFromFile'
+    - type: 'LoadAnnotations'
+    - type: 'Resize'
+      scale: [128, 128]
+      keep_ratio: True
+    - type: 'Normalize'
+      hls_mean: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                 0.0, 0.0]
+      hls_std: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0]
+    - type: 'PackSegInputs'
+  
+  test: *test_pipeline
+
+# Evaluation configuration
+evaluation:
+  metrics: ['mIoU', 'accuracy', 'precision', 'recall', 'f1']
+  main_metric: 'mIoU'
+  output_dir: 'results/predictions'
+  save_predictions: True
+  metric_out_file: 'results/predictions/metrics.txt' 
