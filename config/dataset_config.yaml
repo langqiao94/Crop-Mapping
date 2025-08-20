@@ -4,9 +4,9 @@ data_root: '.'
 
 # Dataset files
 data_files:
-  train: 'Dataset/2022_train.txt'
-  val: 'Dataset/2022_val.txt'
-  test: 'Dataset/2022_test.txt'
+  train: 'Dataset/yourdataset_train.txt'
+  val: 'Dataset/yourdataset_val.txt'
+  test: 'Dataset/yourdataset_test.txt'
 
 # Dataset basic information
 data_info:
@@ -134,4 +134,5 @@ evaluation:
   main_metric: 'mIoU'
   output_dir: 'results/predictions'
   save_predictions: True
+
   metric_out_file: 'results/predictions/metrics.txt' 
