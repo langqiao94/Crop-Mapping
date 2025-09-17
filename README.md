@@ -16,7 +16,5 @@ scikit-learn>=0.24.2;
 
 cudatoolkit>=11.1;
 
-# Dataset
-The dataset can be accessed via this link: https://drive.google.com/drive/u/1/folders/1Cfy5BBOKDsPjALd4T-8FAYFFiLJzgZwa
 
 This is the code for in-season crop mapping produced by Lang Qiao. Email: lqiao@umn.edu. Copyright belongs to Lang Qiao. Feel free to contact me if you have any questions.
