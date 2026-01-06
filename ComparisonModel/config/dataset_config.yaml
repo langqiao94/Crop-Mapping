@@ -1,0 +1,49 @@
+augmentation:
+  enabled: true
+  horizontal_flip: 0.5
+  rotation: true
+  vertical_flip: 0.5
+data_info:
+  class_names:
+  - other
+  - corn
+  - cotton
+  - soybeans
+  - spring wheat
+  - winter wheat
+  hls_channels: 11
+  image_size: 128
+  num_classes: 6
+dataloader:
+  test:
+    batch_size: 24
+    drop_last: false
+    num_workers: 4
+    pin_memory: true
+    shuffle: false
+  train:
+    batch_size: 24
+    drop_last: true
+    num_workers: 4
+    pin_memory: true
+    shuffle: true
+  val:
+    batch_size: 24
+    drop_last: false
+    num_workers: 4
+    pin_memory: true
+    shuffle: false
+dataset:
+  image_root: Dataset/HLS/6
+  label_root: Dataset/Labels
+  test_file_list: Dataset/202201_test.txt
+  train_file_list: Dataset/202201_train.txt
+  val_file_list: Dataset/202201_val.txt
+normalization:
+  enabled: false
+training:
+  batch_size: 24
+  epochs: 100
+  lr: 0.0002
+  num_workers: 4
+  weight_decay: 0.01

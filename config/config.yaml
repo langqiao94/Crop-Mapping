@@ -1,0 +1,77 @@
+data_config: 'config/dataset_config.yaml'
+
+swin_expert:
+  type: 'swin'
+  in_channels: 72
+  embed_dims: 192
+  patch_size: 4
+  window_size: 7
+  mlp_ratio: 2.0
+  depths: [2, 2, 18, 2]
+  num_heads: [6, 12, 24, 48]
+  out_indices: [0, 1, 2, 3]
+  qkv_bias: True
+  patch_norm: True
+  drop_rate: 0.1
+  attn_drop_rate: 0.1
+  drop_path_rate: 0.1
+  use_abs_pos_embed: False
+  act_cfg:
+    type: 'GELU'
+  norm_cfg:
+    type: 'LN'
+    eps: 1e-6
+
+gru_expert:
+  convlstm_hidden_dim: 128
+  num_layers: 1
+  cnn_output_channels: 128
+  convlstm_kernel_size: [3, 3]
+  embedding_dim: 32
+
+decode_head:
+  type: 'UPerHead'
+  in_channels: [192, 384, 768, 1536]
+  channels: 512
+  num_classes: 6
+  dropout: 0.1
+  norm_cfg:
+    type: 'LN'
+    requires_grad: True
+  align_corners: False
+
+category_gate:
+  num_classes: 6
+  hidden_dim: 128
+  dropout: 0.1
+
+training:
+  epochs: 100
+  optimizer:
+    type: 'AdamW'
+    lr: 5.0e-5
+    weight_decay: 0.01
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+  lr_scheduler:
+    type: 'CosineAnnealingWarmRestarts'
+    T_0: 20
+    T_mult: 2
+    eta_min: 1.0e-6
+    warmup:
+      type: 'linear'
+      epochs: 10
+      ratio: 0.3
+  early_stopping:
+    patience: 15
+    min_delta: 0.001
+  checkpoint:
+    save_dir: "checkpoints"
+    save_freq: 100
+  clip_grad:
+    max_norm: 1.0
+    norm_type: 2
+
+metrics:
+  main_metric: "accuracy"
+  metrics_list: ["accuracy", "precision", "recall", "f1", "mIoU"]

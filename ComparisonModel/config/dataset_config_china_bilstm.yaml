@@ -1,0 +1,47 @@
+augmentation:
+  enabled: true
+  horizontal_flip: 0.5
+  rotation: true
+  vertical_flip: 0.5
+data_info:
+  class_names:
+  - other
+  - rice
+  - corn
+  - soybeans
+  hls_channels: 65
+  image_size: 128
+  num_classes: 4
+dataloader:
+  test:
+    batch_size: 24
+    drop_last: false
+    num_workers: 4
+    pin_memory: true
+    shuffle: false
+  train:
+    batch_size: 24
+    drop_last: true
+    num_workers: 4
+    pin_memory: true
+    shuffle: true
+  val:
+    batch_size: 24
+    drop_last: false
+    num_workers: 4
+    pin_memory: true
+    shuffle: false
+dataset:
+  image_root: Dataset/China/HLS/60
+  label_root: Dataset/China/Labels
+  test_file_list: Dataset/China/test.txt
+  train_file_list: Dataset/China/train.txt
+  val_file_list: Dataset/China/val.txt
+normalization:
+  enabled: false
+training:
+  batch_size: 24
+  epochs: 100
+  lr: 0.0002
+  num_workers: 4
+  weight_decay: 0.01
